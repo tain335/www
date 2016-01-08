@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Demo1</title>
+	<style type="text/css">
+		html, body {
+			margin: 0;
+			padding: 0;
+		}
+		html, body, canvas {
+			width: 100%;
+			height: 100%;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="canvas"></canvas>
+	<script type="text/javascript">
+		var canvas = document.getElementById('canvas'),
+			context = canvas.getContext('2d');
+			canvas.width = window.innerWidth;
+			canvas.height = window.innerHeight;
+			// gradient = context.createLinearGradient(0, 0, 0, canvas.height);
+			// gradient.addColorStop(0, 'blue');
+			// gradient.addColorStop(0.25, 'white');
+			// gradient.addColorStop(0.75, 'red');
+			// gradient.addColorStop(1, 'yellow');
+			// context.fillStyle = gradient;
+			// context.rect(0, 0, window.innerWidth, window.innerHeight);
+			// context.fill();
+
+			gradient = context.createRadialGradient(canvas.width / 2, canvas.height, 10, 
+				canvas.width / 2, 0, 100);
+			gradient.addColorStop(0, 'blue');
+			gradient.addColorStop(0.25, 'white');
+			gradient.addColorStop(0.75, 'red');
+			gradient.addColorStop(1, 'yellow');
+			context.fillStyle = gradient;
+			context.rect(0, 0, canvas.width, canvas.height);	
+			context.fill();
+	</script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Demo3</title>
+	<style type="text/css">
+		html, body {
+			margin: 0;
+			padding: 0;
+		}
+		html, body, canvas {
+			width: 100%;
+			height: 100%;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="canvas"></canvas>
+	<script type="text/javascript">
+		var canvas = document.getElementById('canvas'),
+			context = canvas.getContext('2d');
+			canvas.width = window.innerWidth;
+			canvas.height = window.innerHeight;
+			context.beginPath();
+			context.moveTo(100.5, 20.5);
+			context.lineTo(200.5, 20.5)
+			//context.stroke();
+			//context.beginPath();
+			//context.moveTo(100.5, 40.5);
+			//context.lineTo(200.5, 40.5);
+			context.lineTo(200.5, 40.5);
+			context.strokeStyle = '#f00';
+			//context.closePath();
+			context.stroke();
+			//context.strokeAndFill();
+	</script>
+</body>
+</html>
