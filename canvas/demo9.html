@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Demo4</title>
+	<title>Demo9</title>
 	<style type="text/css">
 		html, body {
 			margin: 0;
@@ -20,10 +20,16 @@
 			context = canvas.getContext('2d');
 			canvas.width = window.innerWidth;
 			canvas.height = window.innerHeight;
-			context.arc(300, 190, 150, 0, Math.PI * 2, true);
-			context.arc(300, 190, 100, 0, Math.PI * 2, false);
-			context.fillStyle = 'red';
-			context.fill();
+			context.strokeStyle = 'rgba(200, 0, 0, 1)';
+			context.save();
+			context.lineWidth = 5;
+			context.moveTo(10, 10);
+			context.lineTo(100, 10);
+			context.stroke();
+			context.restore();
+			context.moveTo(10, 20);
+			context.lineTo(100, 20);
+			context.stroke();
 	</script>
 </body>
 </html>

@@ -20,14 +20,17 @@
 			context = canvas.getContext('2d');
 			canvas.width = window.innerWidth;
 			canvas.height = window.innerHeight;
-			var stepx = 10;
-			var stepy = 10;
 			context.strokeStyle = 'rgba(0, 0, 0, 1)';
-			context.moveTo(20, 10);
-			context.arcTo(110, 10, 110, 110, 10);
-			context.arcTo(110, 110, 10, 110, 10);
-			context.arcTo(10, 110, 10, 10, 10);
-			context.arcTo(10, 10, 110, 10, 10);
+			context.moveTo(20.5 + 10, 10.5);
+			context.arcTo(100 + 20.5, 10.5, 100 + 20.5, 10.5 + 10, 10);
+			context.arcTo(100 + 20.5, 100 + 10.5, 20.5 + 100 - 10, 100 + 10.5, 10);
+			context.arcTo(20.5, 100 + 10.5, 20.5, 100 + 10.5 - 10, 10);
+			context.arcTo(20.5, 10.5, 20.5 + 10, 10.5, 10);
+			//context.arcTo(110.5, 100.5, 110.5, 110.5, 10);
+			//context.arcTo(110.5, 10.5, 110.5, 110.5, 9.5);
+			//context.arcTo(110.5, 110.5, 10.5, 110.5, 9.5);
+			//context.arcTo(10.5, 110.5, 10.5, 10.5, 9.5);
+			//context.arcTo(10.5, 10.5, 110.5, 10.5, 9.5);
 			context.stroke();
 	</script>
 </body>

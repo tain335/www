@@ -20,7 +20,7 @@
 			context = canvas.getContext('2d');
 			canvas.width = window.innerWidth;
 			canvas.height = window.innerHeight;
-			context.beginPath();
+			//context.beginPath();
 			context.moveTo(100.5, 20.5);
 			context.lineTo(200.5, 20.5)
 			//context.stroke();
@@ -29,7 +29,9 @@
 			//context.lineTo(200.5, 40.5);
 			context.lineTo(200.5, 40.5);
 			context.strokeStyle = '#f00';
-			//context.closePath();
+			context.closePath(); //回到起点
+			context.moveTo(200.5, 20.5);
+			context.lineTo(300.5, 40.5);
 			context.stroke();
 			//context.strokeAndFill();
 	</script>
