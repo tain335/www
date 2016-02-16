@@ -2,6 +2,7 @@
 <html>
 <head>
 	<title>Demo9</title>
+	<meta http-equiv="content-Type" content="text/html; charset=utf8">
 	<style type="text/css">
 		html, body {
 			margin: 0;
@@ -20,13 +21,16 @@
 			context = canvas.getContext('2d');
 			canvas.width = window.innerWidth;
 			canvas.height = window.innerHeight;
-			context.strokeStyle = 'rgba(200, 0, 0, 1)';
+			context.fillStyle = 'rgba(200, 0, 0, 1)';
 			context.rect(100, 100, 300, 300);
-			context.stroke();
+			context.fill();
+			context.globalCompositeOperation = 'xor';
+			//context.save();
 			context.beginPath();//这里是必须的 如果没有只会当作只有一条路径 stroke()方法会覆盖前一次调用
-			context.strokeStyle = 'rgba(0, 0, 0, 1)';
-			context.rect(200, 200, 400, 400);
-			context.stroke();
+			context.fillStyle = 'rgba(0, 0, 0, 1)';
+			context.arc(400, 400, 100, 0, Math.PI * 2);
+			context.fill();
+			//context.restore();
 			console.log(context.isPointInPath(200, 200));
 	</script>
 </body>

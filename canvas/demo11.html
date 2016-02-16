@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Demo9</title>
+	<meta http-equiv="content-Type" content="text/html; charset=utf8">
+	<style type="text/css">
+		html, body {
+			margin: 0;
+			padding: 0;
+			-webkit-user-select: none;
+		}
+		html, body {
+			width: 100%;
+			height: 100%;
+		}
+		#add:hover {
+			background: black;
+			color: white !important;
+		}
+	</style>
+</head>
+<body>
+	<a id="add" href="javascript:void(0);" style="position:fixed;top:10px;right:10px;padding: 5px 10px; border:1px solid #eee; text-decoration:none; font-size:14px; color:black;">添加</a>
+	<div style="display: flex; width: 100%; height: 100%; flex-flow: column;">
+		<canvas id="canvas1" style="flex: 1"></canvas>
+		<canvas id="canvas2" style="flex: 1"></canvas>
+	</div>
+	<script type="text/javascript">
+		var canvas1 = document.getElementById('canvas1'),
+			ctx1 = canvas1.getContext('2d');
+			canvas1.width = window.innerWidth;
+			canvas1.height = window.innerHeight / 2;
+
+		var canvas2 = document.getElementById('canvas2'),
+			ctx2 = canvas2.getContext('2d');
+			canvas2.width = window.innerWidth;
+			canvas2.height = window.innerHeight / 2;
+
+		var caches = [];
+
+		function Rect(x, y, width, height) {
+			this.x = x;
+			this.y = y;
+			this.width = width;
+			this.height = height;
+			this.offsetX = 0;
+			this.offsetY = 0;
+			this.ctx = createCtx();
+		}
+
+		Rect.prototype.draw = function (ctx) {
+			var x = this.x + this.offsetX,
+				y = this.y + this.offsetY;
+			ctx.beginPath();
+			ctx.rect(x, y, this.width, this.height);
+			ctx.stroke();
+		}
+
+		Rect.prototype.fill = function (ctx) {
+			var x = this.x + this.offsetX,
+				y = this.y + this.offsetY;
+			ctx.beginPath();
+			ctx.rect(x, y, this.width, this.height);
+			ctx.fill();
+		}
+
+		Rect.prototype.move = function (offsetX, offsetY) {
+			this.offsetX = offsetX;
+			this.offsetY = offsetY;
+			this.ctx.clearRect(0, 0, canvas1.width, canvas1.height);
+			this.fill(this.ctx);
+		}
+
+		Rect.prototype.stop = function () {
+			this.x += this.offsetX;
+			this.y += this.offsetY;
+			this.offsetX = 0;
+			this.offsetY = 0;
+			target = -1;
+			redraw();
+		}
+
+		function createCtx() {
+			var canvas = document.createElement('canvas');
+			canvas.width = window.innerWidth;
+			canvas.height = window.innerHeight / 2;
+			return canvas.getContext('2d');
+		}
+
+		document.getElementById('add').addEventListener('click', function () {
+			var r = new Rect(Math.round(600 * Math.random(1)), Math.round(300 * Math.random(1)), Math.round(500 * Math.random(1)), Math.round(500 * Math.random(1)))
+			
+			r.ctx.strokeStyle = ctx1.strokeStyle = 'rgba(' + Math.round(255 * Math.random(1)) + ', ' + Math.round(255 * Math.random(1)) + ', ' + Math.round(100 * Math.random(1)) + ',' + '1)';
+			caches.push(r);
+			r.draw(ctx1);
+			r.draw(r.ctx);
+		});
+
+		var target = -1,
+			orginX = -1,
+			orginY = -1;
+
+		function redraw() {
+			ctx1.clearRect(0, 0, canvas1.width, canvas2.height);
+			for(var j = 0; j < caches.length; j++) {
+				ctx1.strokeStyle = caches[j].ctx.strokeStyle;
+				if(j == target) {
+					ctx1.save();
+					ctx1.fillStyle = ctx1.strokeStyle;
+					caches[j].fill(ctx1);
+					ctx1.restore();
+					continue;
+				}
+				caches[j].draw(ctx1);
+			}
+		}
+
+		function handleMouseMove(evt) {
+			var cache = caches[target];
+			cache.move((evt.pageX - orginX) * (canvas1.width / canvas1.offsetWidth), (evt.pageY - orginY) * (canvas1.height / canvas1.offsetHeight));
+			redraw();
+		}
+
+		canvas1.addEventListener('mousedown', function (evt) {
+			//console.log(evt.pageX - canvas1.offsetLeft, evt.pageY - canvas1.offsetTop);
+			//console.log((evt.pageX - canvas1.offsetLeft) * (canvas1.width / canvas1.offsetWidth), (evt.pageY - canvas1.offsetTop) * (canvas1.height / canvas1.offsetHeight));
+			orginX = evt.pageX;
+			orginY = evt.pageY;
+			for(var i = 0; i < caches.length; i++) {
+				var ins = caches[i].ctx.isPointInPath((evt.pageX - canvas1.offsetLeft) * (canvas1.width / canvas1.offsetWidth), (evt.pageY - canvas1.offsetTop) * (canvas1.height / canvas1.offsetHeight));
+				if(ins) {
+					target = i;
+					redraw();
+					canvas1.addEventListener('mousemove', handleMouseMove);
+				}
+			}
+		});
+
+		canvas1.addEventListener('mouseup', function (evt) {
+			caches[target].stop();
+			canvas1.removeEventListener('mousemove', handleMouseMove);
+		});
+
+		// ctx1.strokeStyle = 'rgba(200, 0, 0, 1)';
+		// ctx1.rect(50, 50, 150, 150);
+		// ctx1.stroke();
+		// console.log(ctx1.isPointInPath(51, 51));
+		// ctx1.beginPath();//这里是必须的 如果没有只会当作只有一条路径 stroke()方法会覆盖前一次调用
+		// ctx1.strokeStyle = 'rgba(0, 0, 0, 1)';
+		// ctx1.rect(100, 100, 200, 200);
+		// ctx1.stroke();
+		// ctx2.drawImage(canvas1, 0, 0);
+		//console.log(ctx1.isPointInPath(51, 51));
+	</script>
+</body>
+</html>
