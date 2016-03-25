@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Demo9</title>
+	<meta http-equiv="content-Type" content="text/html; charset=utf8">
+	<style type="text/css">
+		html, body {
+			margin: 0;
+			padding: 0;
+		}
+		html, body, canvas {
+			width: 100%;
+			height: 100%;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="canvas"></canvas>
+	<script type="text/javascript">
+		var canvas = document.getElementById('canvas'),
+			context = canvas.getContext('2d');
+		canvas.width = window.innerWidth;
+		canvas.height = window.innerHeight;
+		
+		var sources = [
+			'images/c1.jpg',
+			'images/c2.jpg',
+			'images/c3.jpg',
+			'images/c4.jpg',
+			'images/t1.png',
+			'images/t2.png'
+		];
+		var loadedImgs = {};
+
+		function loadImages(urls, timeout ,callback) {
+	        var count = 0;
+	        var self = this;
+	        var timer = -1;
+	        if(typeof timeout == 'function') {
+	            callback = timeout;
+	            timeout = 20000;
+	        }
+	        if(urls.length && timeout > 0) {
+	            timer = setTimeout(function() {
+	                callback && callback();
+	                callback = null;
+	            }, timeout);
+	        }
+	        for(var i = 0; i < urls.length; i++) {
+	            if(loadedImgs[urls[i]]) {
+	                if(++count == urls.length) {
+	                    clearTimeout(timer);
+	                    callback && callback();
+	                }
+	                continue;
+	            }
+	            
+	            (function(url) {
+	            	var img = document.createElement('img');	
+	                img.onload = function() {
+	                    loadedImgs[url] = img;
+	                    if(++count == urls.length) {
+	                        clearTimeout(timer);
+	                        callback && callback();
+	                        callback = null;
+	                    }
+	                };
+	                img.src = url;
+	            })(urls[i]);  
+	        }
+	    }
+
+	    loadImages(sources, 10000, function () {
+	    	window.requestAnimationFrame(draw);
+	    });
+
+	    var offsetRate1 = 0.1,
+			offsetRate2	= 0.4,
+			offsetRate3 = 0.7,
+			start = Number(new Date()),
+			unit = 300 / 10000;
+
+		function draw(passTime) {
+			var offset1 = offsetRate1 * passTime * unit,
+				offset2 = offsetRate2 * passTime * unit,
+				offset3 = offsetRate3 * passTime * unit;
+			context.clearRect(0, 0, canvas.width, canvas.height);
+			context.save();
+			context.fillStyle = "#53b0fe";
+			context.rect(0, 0, canvas.width, canvas.height);
+			context.fill();
+			//console.log(offset1);
+			context.drawImage(loadedImgs[sources[0]], 20 + offset1, 30);
+			context.drawImage(loadedImgs[sources[2]], 500 + offset1, 120);
+			context.drawImage(loadedImgs[sources[3]], canvas.width - loadedImgs[sources[3]].width + offset1, 0);
+
+			context.drawImage(loadedImgs[sources[5]], 0 + offset2, canvas.height - loadedImgs[sources[5]].height / 4 - 250, loadedImgs[sources[5]].width / 4, loadedImgs[sources[4]].height / 4);
+			context.drawImage(loadedImgs[sources[5]], 800 + offset2, canvas.height - loadedImgs[sources[5]].height / 4 - 250, loadedImgs[sources[5]].width / 4, loadedImgs[sources[4]].height / 4);
+			context.drawImage(loadedImgs[sources[5]], 400 + offset2, canvas.height - loadedImgs[sources[5]].height / 4 - 250, loadedImgs[sources[5]].width / 4, loadedImgs[sources[4]].height / 4);
+			context.drawImage(loadedImgs[sources[4]], -200 + offset3, canvas.height - loadedImgs[sources[4]].height / 3 - 100, loadedImgs[sources[4]].width / 3, loadedImgs[sources[4]].height / 3);
+			context.drawImage(loadedImgs[sources[4]], 200 + offset3, canvas.height - loadedImgs[sources[4]].height / 3 - 100, loadedImgs[sources[4]].width / 3, loadedImgs[sources[4]].height / 3);
+			context.drawImage(loadedImgs[sources[4]], 600 + offset3, canvas.height - loadedImgs[sources[4]].height / 3 - 100, loadedImgs[sources[4]].width / 3, loadedImgs[sources[4]].height / 3);
+			context.restore();
+			window.requestAnimationFrame(draw);
+		}
+
+	</script>
+</body>
+</html>
