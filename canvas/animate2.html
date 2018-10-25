@@ -1,0 +1,80 @@
+<!DOCTYPE <!DOCTYPE html>
+<html>
+<head>
+	<title>Animate</title>
+	<style type="text/css">
+		html, body {
+			margin: 0;
+			padding: 0;
+		}
+		html, body, canvas {
+			width: 100%;
+			height: 100%;
+		}
+	</style>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+<script type="text/javascript">
+	var canvas = document.getElementById('canvas');
+	var ctx = canvas.getContext('2d');
+	canvas.width = window.innerWidth;
+	canvas.height = window.innerHeight;
+	var x = 0;
+	var y = 0;
+	var MAX_X = window.innerWidth - 200;
+	var MAX_Y = window.innerHeight - 200;
+	var angel = Math.random() * 2 * Math.PI;
+	var isTop = false;
+	var isLeft = false;
+	var speedX = Math.abs(Math.cos(angel) * 5);
+	var speedY = Math.abs(Math.sin(angel) * 5);
+	console.log(speedX, speedY);
+	function draw() {
+		ctx.clearRect(0,0,canvas.width,canvas.height);		
+		ctx.save();
+		ctx.beginPath(); //必须的重新开始路径
+		ctx.fillStyle = 'rgba(0, 200, 0, 1)';
+		ctx.lineWidth = 5;
+		//x += 5;
+
+		
+		if(x > MAX_X) {
+			x = MAX_X;
+			isLeft = false;
+		} else if(x < 0) {
+			x = 0;
+			isLeft = true;
+		}
+		if(y > MAX_Y) {
+			y = MAX_Y;
+			isTop = false;
+		} else if(y < 0) {
+			y = 0;	
+			isTop = true;
+		}
+
+		if(isTop) {
+			y += speedY;
+		} else {
+			y -= speedY;
+		}
+		if(isLeft) {
+			x += speedX;
+		} else {
+			x -= speedX;
+		}
+
+		ctx.arc(x + 100, y + 100, 100, 0, 2 * Math.PI);
+		//ctx.rect(x, y, CLIENT_SIZE, CLIENT_SIZE);
+		//ctx.closePath();
+		ctx.fill();
+		ctx.restore();
+	}
+	window.requestAnimationFrame(function() {
+		draw();
+		requestAnimationFrame(arguments.callee);
+	});
+</script>
+</body>
+</html>

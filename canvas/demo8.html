@@ -2,6 +2,7 @@
 <html>
 <head>
 	<title>Demo8</title>
+	<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
 	<style type="text/css">
 		html, body {
 			margin: 0;
@@ -11,25 +12,55 @@
 			width: 100%;
 			height: 100%;
 		}
+		canvas {
+			position: fixed;
+			top: 0;
+			left: 0;
+		}
+		img {
+			display: block;
+			margin: 0;
+			border: 0;
+			padding: 0;
+			width: 100%;
+			height: 100%;
+		}
 	</style>
 </head>
 <body>
+	<img src="./images/test.jpg">
 	<canvas id="canvas"></canvas>
 	<script type="text/javascript">
+		var lastPt = {x: 0, y: 0};
 		var canvas = document.getElementById('canvas'),
 			context = canvas.getContext('2d');
-			canvas.width = window.innerWidth;
-			canvas.height = window.innerHeight;
+			canvas.width = window.innerWidth * window.devicePixelRatio;
+			canvas.height = window.innerHeight * window.devicePixelRatio;
 			context.fillStyle = 'black';
-			context.rect(0, 0, window.innerWidth, window.innerHeight);
+			context.rect(0, 0, window.innerWidth * window.devicePixelRatio, window.innerHeight * window.devicePixelRatio);
 			context.fill();
-			canvas.addEventListener('mousemove', function(evt) {
+			canvas.addEventListener('touchstart', function(evt) {
+				lastPt = {x: evt.touches[0].pageX * window.devicePixelRatio, y: evt.touches[0].pageY * window.devicePixelRatio}
+			});
+			canvas.addEventListener('touchmove', function(evt) {
+				var touch = evt.changedTouches[0];
 				context.save();
 				context.beginPath();//这里一定需要beginPath，否则第一个rect也会被clip
 				//context.rect(evt.pageX - 25, evt.pageY - 25, 50, 50);
-				context.arc(evt.pageX - 25, evt.pageY - 25, 25, 0, Math.PI * 2, false);
+				//context.arc(touch.pageX * window.devicePixelRatio - 25, touch.pageY * window.devicePixelRatio - 25, 25, 0, Math.PI * 2, false);
+				context.moveTo(lastPt.x, lastPt.y);
+			    // Line to latest point
+			    context.lineTo(touch.pageX * window.devicePixelRatio, touch.pageY * window.devicePixelRatio);
+			    // Draw it!
+			    context.strokeStyle = 'white';
+			    context.lineWidth = 25;
+			    context.lineCap = context.lineJoin = "round";
+			    context.globalCompositeOperation = 'destination-out';
+			    context.stroke();
+			    //Store latest touchpoint
+			    lastPt = {x:touch.pageX * window.devicePixelRatio, y:touch.pageY * window.devicePixelRatio};
 				context.clip();
-				context.clearRect(0, 0, window.innerWidth, window.innerHeight);
+				context.clearRect(0, 0, window.innerWidth * window.devicePixelRatio, window.innerHeight * window.devicePixelRatio);
 				context.restore();
 			}, false);
 	</script>

@@ -1,0 +1,109 @@
+<!DOCTYPE <!DOCTYPE html>
+<html>
+<head>
+	<title>Animate</title>
+	<style type="text/css">
+		html, body {
+			margin: 0;
+			padding: 0;
+		}
+		html, body, canvas {
+			width: 100%;
+			height: 100%;
+		}
+	</style>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+<script type="text/javascript">
+	var canvas = document.getElementById('canvas');
+	var ctx = canvas.getContext('2d');
+	canvas.width = window.innerWidth;
+	canvas.height = window.innerHeight;
+	var x = 0;
+	var y = 0;
+	var MAX_X = window.innerWidth - 100;
+	var MAX_Y = window.innerHeight - 100;
+	var CLIENT_SIZE = 100;
+	var KEY_MAP = {};
+	var LEFT = 65;
+	var RIGHT = 68;
+	var UP = 87;
+	var DOWN = 83;
+	document.onkeydown = document.onkeyup = function(event) {
+		KEY_MAP[event.keyCode] = event.type == 'keydown';
+		if(KEY_MAP[RIGHT]) {
+			if(KEY_MAP[UP] || KEY_MAP[DOWN]) {
+				x += 5 / 1.41421;
+			} else {
+				x += 5;
+			}
+		}
+		if(KEY_MAP[LEFT]) {
+			if(KEY_MAP[UP] || KEY_MAP[DOWN]) {
+				x -= 5 / 1.41421;
+			} else {
+				x -= 5;
+			}
+		}
+		if(KEY_MAP[UP]) {
+			if(KEY_MAP[LEFT] || KEY_MAP[RIGHT]) {
+				y -= 5 / 1.41421;
+			} else {
+				y -= 5;
+			}
+		}
+		if(KEY_MAP[DOWN]) {
+			if(KEY_MAP[LEFT] || KEY_MAP[RIGHT]) {
+				y += 5 / 1.41421;
+			} else {
+				y += 5;
+			}
+		}
+		draw();
+	}
+	// document.onkeydown = function(event) {
+	// 	//console.log(event);
+	// 	if(event.keyCode == 65) {
+	// 		x -= 5;
+	// 	} else if(event.keyCode == 68) {
+	// 		x += 5;
+	// 	} else if(event.keyCode == 87) {
+	// 		y -= 5
+	// 	} else if(event.keyCode == 83) {
+	// 		y += 5;
+	// 	}
+	// 	draw();
+	// }
+	draw();
+	function draw() {
+		ctx.clearRect(0,0,canvas.width,canvas.height);		
+		ctx.save();
+		ctx.beginPath(); //必须的重新开始路径
+		ctx.fillStyle = 'rgba(0, 200, 0, 1)';
+		ctx.lineWidth = 5;
+		//x += 5;
+		if(x > MAX_X) {
+			x = MAX_X;
+		} else if(x < 0) {
+			x = 0;
+		}
+		if(y > MAX_Y) {
+			y = MAX_Y;
+		} else if(y < 0) {
+			y = 0;	
+		}
+		ctx.rect(x, y, CLIENT_SIZE, CLIENT_SIZE);
+		//ctx.closePath();
+		ctx.fill();
+		ctx.restore();
+	}
+	/*
+	window.requestAnimationFrame(function() {
+		draw();
+		requestAnimationFrame(arguments.callee);
+	});
+	*/
+</script>
+</body>
+</html>
