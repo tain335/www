@@ -13,7 +13,8 @@
             },
 			"stopOnEntry": false,
 			"sourceMaps": true,
-			"outDir": null
+			"outDir": null,
+            "cwd": null
 		}
 	]
 }
